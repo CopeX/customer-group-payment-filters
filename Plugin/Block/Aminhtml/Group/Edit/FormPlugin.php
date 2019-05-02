@@ -125,8 +125,9 @@ class FormPlugin
      */
     private function getDisallowedPaymentOptions($customerGroup)
     {
-        if ($customerGroup->getExtensionAttributes() !== null) {
+        if ($customerGroup->getExtensionAttributes()->getDisallowedPaymentOptions() !== null) {
             $disallowedPaymentMethods = $customerGroup->getExtensionAttributes()
+                ->getDisallowedPaymentOptions()
                 ->getDisallowedPaymentOptions();
         } else {
             $disallowedPaymentMethods = [];
