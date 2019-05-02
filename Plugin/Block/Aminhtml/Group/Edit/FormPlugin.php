@@ -127,7 +127,6 @@ class FormPlugin
     {
         if ($customerGroup->getExtensionAttributes() !== null) {
             $disallowedPaymentMethods = $customerGroup->getExtensionAttributes()
-                ->getDisallowedPaymentOptions()
                 ->getDisallowedPaymentOptions();
         } else {
             $disallowedPaymentMethods = [];
