@@ -84,7 +84,13 @@ class FormPlugin
      */
     private function getPaymentMethodsList()
     {
-        $paymentOptions = $this->paymentHelper->getPaymentMethodList();
+        $paymentOptions = [];
+        $allpaymentmethods=$this->paymentHelper->getPaymentMethods();
+
+        foreach ($allpaymentmethods as $code => $data) {
+            if(!isset($data['title'])) continue; //skip if payment method not have name
+            $paymentOptions[$code] = $data['title'];
+        }
 
         return array_filter(array_map(function ($paymentMethodCode, $paymentMethodDescription) {
             if($paymentMethodDescription == '') return;
