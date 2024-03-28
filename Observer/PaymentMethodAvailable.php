@@ -2,23 +2,17 @@
 
 namespace GalacticLabs\CustomerGroupPaymentFilters\Observer;
 
-use Magento\Customer\Model\Group;
 use Magento\Framework\Event\ObserverInterface;
 
 class PaymentMethodAvailable implements ObserverInterface
 {
     /**
-     * @var \Magento\Customer\Model\Session
-     */
-    private $customerSession;
-    /**
      * @var \Magento\Customer\Api\GroupRepositoryInterface
      */
     private $groupRepository;
 
-    public function __construct(\Magento\Customer\Model\Session $customerSession, \Magento\Customer\Api\GroupRepositoryInterface $groupRepository)
+    public function __construct(\Magento\Customer\Api\GroupRepositoryInterface $groupRepository)
     {
-        $this->customerSession = $customerSession;
         $this->groupRepository = $groupRepository;
     }
 
@@ -32,10 +26,7 @@ class PaymentMethodAvailable implements ObserverInterface
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
-        $customerGroupId = Group::NOT_LOGGED_IN_ID;
-        if ($this->customerSession->isLoggedIn()) {
-            $customerGroupId = $this->customerSession->getCustomer()->getGroupId();
-        }
+        $customerGroupId = $observer->getEvent()->getQuote()->getCustomerGroupId();
         $customerGroup = $this->groupRepository->getById($customerGroupId);
         $customerGroupDisabledPaymentMethods = $customerGroup->getExtensionAttributes()
             ->getDisallowedPaymentOptions()
