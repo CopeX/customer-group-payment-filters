@@ -26,7 +26,11 @@ class PaymentMethodAvailable implements ObserverInterface
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
-        $customerGroupId = $observer->getEvent()->getQuote()->getCustomerGroupId();
+        $quote = $observer->getEvent()->getQuote();
+        if(!$quote){
+            return;
+        }
+        $customerGroupId = $quote->getCustomerGroupId();
         $customerGroup = $this->groupRepository->getById($customerGroupId);
         $customerGroupDisabledPaymentMethods = $customerGroup->getExtensionAttributes()
             ->getDisallowedPaymentOptions()
